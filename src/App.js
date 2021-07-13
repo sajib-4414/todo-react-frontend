@@ -4,9 +4,11 @@ import AddTodo from "./components/AddTodo";
 import React,{Component} from "react";
 import TodoList from "./components/TodoList";
 import './bootstrap/bootstrap.min.css'
+import TodoTypeTabs from "./components/TodoTypeTabs";
 class App extends React.Component{
   state = {
-    todos:[]
+    todos:[],
+    currentType:"all",
   }
   getId = ()=>{
     var maximum = 5000
@@ -21,6 +23,9 @@ class App extends React.Component{
       completed: false
     }
     this.setState({todos:[...this.state.todos,todo_item]})
+  }
+  getChosenTodos() {
+    return this.state.todos
   }
 
   render() {
@@ -37,14 +42,12 @@ class App extends React.Component{
                     <AddTodo
                         recieveTodoFromForm = {this.addTodo}
                     />
+
                     <ul className="nav nav-pills todo-nav">
-                      <li role="presentation" className="nav-item all-task active"><a href="#" className="nav-link">All</a></li>
-                      <li role="presentation" className="nav-item active-task"><a href="#" className="nav-link">Active</a></li>
-                      <li role="presentation" className="nav-item completed-task"><a href="#" className="nav-link">Completed</a>
-                      </li>
+                      <TodoTypeTabs/>
                     </ul>
                     <div className="todo-list">
-                      <TodoList todos={this.state.todos}/>
+                      <TodoList todos={this.getChosenTodos()}/>
                     </div>
 
 
@@ -61,6 +64,7 @@ class App extends React.Component{
 
     );
   }
+
 
 
 }
