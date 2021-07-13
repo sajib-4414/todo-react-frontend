@@ -4,8 +4,9 @@ function Todo({todo}) {
         <div className="todo-item">
             <div className="checker"><span className=""><input type="checkbox"/></span></div>
             <span>{todo.description}</span>
-            <a href="javascript:void(0);" className="float-right remove-todo-item"><i
-                className="icon-close"></i></a>
+            {/*<a  className="float-right remove-todo-item">*/}
+                <button type="button" className="float-right btn-close" aria-label="Close">X</button>
+        {/*</a>*/}
         </div>
     );
 }

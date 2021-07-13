@@ -3,6 +3,7 @@ import Header from "./Header";
 import AddTodo from "./components/AddTodo";
 import React,{Component} from "react";
 import TodoList from "./components/TodoList";
+import './bootstrap/bootstrap.min.css'
 class App extends React.Component{
   state = {
     todos:[]
