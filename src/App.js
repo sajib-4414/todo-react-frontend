@@ -49,6 +49,10 @@ class App extends React.Component{
     })
   }
 
+  ItemDeleteCallBack = todoId =>{
+    this.setState({todos:this.state.todos.filter(todo=>todo.id !==todoId)})
+  }
+
   render() {
     return (
         <React.Fragment>
@@ -73,6 +77,7 @@ class App extends React.Component{
                       <TodoList
                           todos={this.getChosenTodos()}
                           changeTodoCompleteStatus = {this.changeTodoCompleteStatus}
+                          ItemDeleteCallBack = {this.ItemDeleteCallBack}
                       />
                     </div>
 
