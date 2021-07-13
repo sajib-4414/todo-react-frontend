@@ -35,7 +35,11 @@ function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
 
     function handleToggle(){
         // todo.completed = !todo.completed
-        todoUpdateCallBack(displayingTodo)
+        // setDisplayingTodo({id: todo.id, description: displayingTodo.description, completed: !todo.completed})
+        const editted_todo = {id: todo.id, description: displayingTodo.description, completed: !todo.completed}
+        todoUpdateCallBack(editted_todo)
+        setDisplayingTodo(editted_todo)
+
     }
     function handleDelete(){
         confirmAlert(options);
@@ -55,6 +59,11 @@ function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
     }
     function handleFormSubmit(formEvent){
         formEvent.preventDefault()
+        todoUpdateCallBack(displayingTodo)
+
+    }
+    function handleEditInputChange(inputEvent){
+        setDisplayingTodo({id: todo.id, description: inputEvent.target.value, completed: todo.completed})
 
     }
     // function handleCancelButtonClick(){
@@ -66,13 +75,13 @@ function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
             <div >
                 <div className="checker"><span className=""><input type="checkbox" checked={!displayingTodo.completed?null:"true"}
                                                                    onChange={handleToggle}/></span></div>
-                <span className={displayingTodo.completed?"text-strike":null}>{displayingTodo.description}</span>
+                <span className={displayingTodo.completed?"text-strike":null}>{todo.description}</span>
                 <button type="button" onClick={handleDelete} className="float-right btn-close" aria-label="Close">X</button>
             </div>
             {editMode?
                 <div>
                     <form onSubmit={handleFormSubmit}>
-                        <input value={displayingTodo.description} placeholder="Enter the edit text"/>
+                        <input value={displayingTodo.description} onChange={handleEditInputChange} placeholder="Enter the edit text"/>
                         <button type="submit">Submit</button>
                         <button type="button" onClick={handleEditCancelButtonClick}>Cancel</button>
                     </form>
