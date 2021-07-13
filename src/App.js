@@ -3,9 +3,12 @@ import Header from "./Header";
 import AddTodo from "./components/AddTodo";
 import React,{Component} from "react";
 import TodoList from "./components/TodoList";
+import './bootstrap/bootstrap.min.css'
+import TodoTypeTabs from "./components/TodoTypeTabs";
 class App extends React.Component{
   state = {
-    todos:[]
+    todos:[],
+    currentType:"All",
   }
   getId = ()=>{
     var maximum = 5000
@@ -20,6 +23,30 @@ class App extends React.Component{
       completed: false
     }
     this.setState({todos:[...this.state.todos,todo_item]})
+  }
+  getChosenTodos() {
+    if (this.state.currentType === "Completed")
+    {
+      return this.state.todos.filter(todo=>todo.completed)
+    }
+    else if (this.state.currentType === "Active"){
+      return this.state.todos.filter(todo=>!todo.completed)
+    }
+    return this.state.todos
+  }
+  changeTodoType = type =>{
+    this.setState({currentType: type})
+  }
+  changeTodoCompleteStatus = todoId=>{
+     // alert("I am here for the id "+todoId)
+    this.setState({
+      todos: this.state.todos.map(todo => {
+        if (todo.id === todoId){
+          todo.completed = !todo.completed
+        }
+        return todo
+      })
+    })
   }
 
   render() {
@@ -36,14 +63,17 @@ class App extends React.Component{
                     <AddTodo
                         recieveTodoFromForm = {this.addTodo}
                     />
+
                     <ul className="nav nav-pills todo-nav">
-                      <li role="presentation" className="nav-item all-task active"><a href="#" className="nav-link">All</a></li>
-                      <li role="presentation" className="nav-item active-task"><a href="#" className="nav-link">Active</a></li>
-                      <li role="presentation" className="nav-item completed-task"><a href="#" className="nav-link">Completed</a>
-                      </li>
+                      <TodoTypeTabs
+                          changeTodoType = {this.changeTodoType}
+                      />
                     </ul>
                     <div className="todo-list">
-                      <TodoList todos={this.state.todos}/>
+                      <TodoList
+                          todos={this.getChosenTodos()}
+                          changeTodoCompleteStatus = {this.changeTodoCompleteStatus}
+                      />
                     </div>
 
 
@@ -60,6 +90,7 @@ class App extends React.Component{
 
     );
   }
+
 
 
 }

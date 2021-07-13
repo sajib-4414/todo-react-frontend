@@ -1,15 +1,16 @@
 import React,{Component} from "react";
+import Todo from "./Todo";
 
 class TodoList extends React.Component {
     render() {
         return (
             this.props.todos.map(todoItem => (
-                <div key= {todoItem.id} className="todo-item">
-                    <div className="checker"><span className=""><input type="checkbox"/></span></div>
-                    <span>{todoItem.description}</span>
-                    <a href="javascript:void(0);" className="float-right remove-todo-item"><i
-                        className="icon-close"></i></a>
-                </div>
+                <Todo
+                key= {todoItem.id}
+                todo={todoItem}
+                notifyCompleteStatusChange={this.props.changeTodoCompleteStatus}
+                />
+
             ))
 
 
