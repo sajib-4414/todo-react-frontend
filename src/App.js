@@ -8,7 +8,7 @@ import TodoTypeTabs from "./components/TodoTypeTabs";
 class App extends React.Component{
   state = {
     todos:[],
-    currentType:"all",
+    currentType:"All",
   }
   getId = ()=>{
     var maximum = 5000
@@ -27,6 +27,9 @@ class App extends React.Component{
   getChosenTodos() {
     return this.state.todos
   }
+  changeTodoType = type =>{
+    this.setState({currentType: type})
+  }
 
   render() {
     return (
@@ -44,7 +47,9 @@ class App extends React.Component{
                     />
 
                     <ul className="nav nav-pills todo-nav">
-                      <TodoTypeTabs/>
+                      <TodoTypeTabs
+                          changeTodoType = {this.changeTodoType}
+                      />
                     </ul>
                     <div className="todo-list">
                       <TodoList todos={this.getChosenTodos()}/>

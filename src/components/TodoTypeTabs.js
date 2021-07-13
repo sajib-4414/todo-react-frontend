@@ -6,11 +6,16 @@ class TodoTypeTabs extends React.Component{
         "Active",
         "Completed"
     ]
+    state = {
+        currentTab:"All"
+    }
+    sendTabTypeToParent = ({event, item})=>{
+        this.props.changeTodoType(item)
+    }
     render() {
         return(
             this.tabs.map(item => (
-                <li role="presentation" className="nav-item all-task active"><a href="#" className="nav-link">{item}</a></li>
-
+                <li role="presentation" className="nav-item all-task active"><a href="#" onClick={()=>{this.sendTabTypeToParent({item})}} className="nav-link">{item}</a></li>
             )))
 
     }
