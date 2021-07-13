@@ -25,6 +25,13 @@ class App extends React.Component{
     this.setState({todos:[...this.state.todos,todo_item]})
   }
   getChosenTodos() {
+    if (this.state.currentType === "Completed")
+    {
+      return this.state.todos.filter(todo=>todo.completed)
+    }
+    else if (this.state.currentType === "Active"){
+      return this.state.todos.filter(todo=>!todo.completed)
+    }
     return this.state.todos
   }
   changeTodoType = type =>{
