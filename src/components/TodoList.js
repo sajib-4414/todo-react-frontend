@@ -8,6 +8,7 @@ class TodoList extends React.Component {
                 <Todo
                 key= {todoItem.id}
                 todo={todoItem}
+                notifyCompleteStatusChange={this.props.changeTodoCompleteStatus}
                 />
 
             ))

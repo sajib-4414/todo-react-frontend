@@ -37,6 +37,17 @@ class App extends React.Component{
   changeTodoType = type =>{
     this.setState({currentType: type})
   }
+  changeTodoCompleteStatus = todoId=>{
+     // alert("I am here for the id "+todoId)
+    this.setState({
+      todos: this.state.todos.map(todo => {
+        if (todo.id === todoId){
+          todo.completed = !todo.completed
+        }
+        return todo
+      })
+    })
+  }
 
   render() {
     return (
@@ -59,7 +70,10 @@ class App extends React.Component{
                       />
                     </ul>
                     <div className="todo-list">
-                      <TodoList todos={this.getChosenTodos()}/>
+                      <TodoList
+                          todos={this.getChosenTodos()}
+                          changeTodoCompleteStatus = {this.changeTodoCompleteStatus}
+                      />
                     </div>
 
 
