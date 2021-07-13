@@ -8,7 +8,7 @@ class TodoList extends React.Component {
                 <Todo
                 key= {todoItem.id}
                 todo={todoItem}
-                notifyCompleteStatusChange={this.props.changeTodoCompleteStatus}
+                todoUpdateCallBack={this.props.todoUpdateCallBack}
                 notifyItemDelete={this.props.ItemDeleteCallBack}
                 />
 
