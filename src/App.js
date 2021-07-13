@@ -42,7 +42,7 @@ class App extends React.Component{
     this.setState({
       todos: this.state.todos.map(todo => {
         if (todo.id === todo_edited.id){
-          todo.completed = todo_edited.completed
+          return todo_edited
         }
         return todo
       })

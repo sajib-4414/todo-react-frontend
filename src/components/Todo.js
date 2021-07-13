@@ -60,6 +60,7 @@ function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
     function handleFormSubmit(formEvent){
         formEvent.preventDefault()
         todoUpdateCallBack(displayingTodo)
+        setEditMode(!editMode)
 
     }
     function handleEditInputChange(inputEvent){
