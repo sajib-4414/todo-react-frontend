@@ -1,12 +1,42 @@
 import React from "react";
 import '../designs/Todo.css'
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 function Todo({todo,notifyCompleteStatusChange, notifyItemDelete}) {
+
+    const options = {
+        title: 'Confirm delete?',
+        message: 'Are you sure to delete this item from your todo list forever?',
+        buttons: [
+            {
+                label: 'Yes',
+                onClick: () => {
+                    notifyItemDelete(todo.id)
+                }
+            },
+            {
+                label: 'No',
+                onClick: () => alert('Clicked No')
+            }
+        ],
+        childrenElement: () => <div />,
+        // customUI: ({ onClose }) => <div>Custom UI</div>,
+        closeOnEscape: true,
+        closeOnClickOutside: true,
+        willUnmount: () => {},
+        afterClose: () => {},
+        onClickOutside: () => {},
+        onKeypressEscape: () => {},
+        overlayClassName: "overlay-custom-class-name"
+    };
+
     function handleToggle(){
         // todo.completed = !todo.completed
         notifyCompleteStatusChange(todo.id)
     }
     function handleDelete(){
-        notifyItemDelete(todo.id)
+        confirmAlert(options);
+
     }
 
     return (
@@ -21,3 +51,7 @@ function Todo({todo,notifyCompleteStatusChange, notifyItemDelete}) {
     );
 }
 export default Todo
+
+
+
+
