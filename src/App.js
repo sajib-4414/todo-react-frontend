@@ -5,6 +5,10 @@ import TodoList from "./components/TodoList";
 import './bootstrap/bootstrap.min.css'
 import TodoTypeTabs from "./components/TodoTypeTabs";
 import axios from "axios";
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+toast.configure()
+
 class App extends React.Component{
   state = {
     todos:[],
@@ -16,6 +20,11 @@ class App extends React.Component{
       username: "tanjim",
       password: "12345678"
     }
+  }
+  showErrorToast =(message)=>{
+    toast.error(message, {
+      // Set to 15sec
+      position: toast.POSITION.BOTTOM_LEFT, autoClose:15000})
   }
   todo_list_and_creation_url = "http://127.0.0.1:8000/todonew/"
   // getId = ()=>{
@@ -36,10 +45,13 @@ class App extends React.Component{
         .then(results=>{
           const todo_item = results.data
           this.setState({todos:[...this.state.todos,todo_item]})
+
+          // toast('Hello Geeks')
         })
          .catch(error => {
+           this.showErrorToast("Network error occurred while adding Todo")
            console.log(error.response)
-         });;
+         });
   }
   getTodosByType() {
     if (this.state.currentType === "Completed")
@@ -69,6 +81,7 @@ class App extends React.Component{
         })
         .catch(error => {
           console.log(error.response)
+          this.showErrorToast("Network error occurred updating the Todo")
         });;
 
 
@@ -83,7 +96,12 @@ class App extends React.Component{
 
   ItemDeleteCallBack = todoId =>{
     axios.delete(this.todo_list_and_creation_url+todoId+"/",this.login_auth_credentials)
-        .then(() => this.setState({todos:this.state.todos.filter(todo=>todo.id !==todoId)}));
+        .then(() => this.setState({todos:this.state.todos.filter(todo=>todo.id !==todoId)}))
+        .catch(error => {
+          this.showErrorToast("Network error occurred deleting Todo")
+          console.log(error.response)
+        })
+    ;
 
     // axios.delete(this.todo_list_and_creation_url+todoId+"/", todo_edited, this.login_auth_credentials)
     //     .then(results=>{
