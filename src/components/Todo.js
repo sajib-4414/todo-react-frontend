@@ -36,7 +36,7 @@ function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
     function handleToggle(){
         // todo.completed = !todo.completed
         // setDisplayingTodo({id: todo.id, description: displayingTodo.description, completed: !todo.completed})
-        const editted_todo = {id: todo.id, description: displayingTodo.description, completed: !todo.completed}
+        const editted_todo = {id: todo.id, description: displayingTodo.description, is_completed: !todo.is_completed}
         todoUpdateCallBack(editted_todo)
         setDisplayingTodo(editted_todo)
 
@@ -64,7 +64,7 @@ function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
 
     }
     function handleEditInputChange(inputEvent){
-        setDisplayingTodo({id: todo.id, description: inputEvent.target.value, completed: todo.completed})
+        setDisplayingTodo({id: todo.id, description: inputEvent.target.value, is_completed: todo.is_completed})
 
     }
     // function handleCancelButtonClick(){
@@ -74,9 +74,9 @@ function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
     return (
         <div className="todo-item">
             <div >
-                <div className="checker"><span className=""><input type="checkbox" checked={!displayingTodo.completed?null:"true"}
+                <div className="checker"><span className=""><input type="checkbox" checked={!displayingTodo.is_completed?null:"true"}
                                                                    onChange={handleToggle}/></span></div>
-                <span className={displayingTodo.completed?"text-strike":null}>{todo.description}</span>
+                <span className={displayingTodo.is_completed?"text-strike":null}>{todo.description}</span>
                 <button type="button" onClick={handleDelete} className="float-right btn-close" aria-label="Close">X</button>
             </div>
             {editMode?
