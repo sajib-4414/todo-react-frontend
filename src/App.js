@@ -55,14 +55,23 @@ class App extends React.Component{
     this.setState({currentType: type})
   }
   updateTodo = todo_edited=>{
-    this.setState({
-      todos: this.state.todos.map(todo => {
-        if (todo.id === todo_edited.id){
-          return todo_edited
-        }
-        return todo
-      })
-    })
+    axios.put(this.todo_list_and_creation_url+todo_edited.id+"/", todo_edited, this.login_auth_credentials)
+        .then(results=>{
+          const todo_item_from_response = results.data
+          this.setState({
+            todos: this.state.todos.map(todo => {
+              if (todo.id === todo_edited.id){
+                return todo_item_from_response
+              }
+              return todo
+            })
+          })
+        })
+        .catch(error => {
+          console.log(error.response)
+        });;
+
+
   }
   componentDidMount() {
     //fetching all existing list of todos
