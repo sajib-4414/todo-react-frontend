@@ -82,7 +82,25 @@ class App extends React.Component{
   }
 
   ItemDeleteCallBack = todoId =>{
-    this.setState({todos:this.state.todos.filter(todo=>todo.id !==todoId)})
+    axios.delete(this.todo_list_and_creation_url+todoId+"/",this.login_auth_credentials)
+        .then(() => this.setState({todos:this.state.todos.filter(todo=>todo.id !==todoId)}));
+
+    // axios.delete(this.todo_list_and_creation_url+todoId+"/", todo_edited, this.login_auth_credentials)
+    //     .then(results=>{
+    //       const todo_item_from_response = results.data
+    //       this.setState({
+    //         todos: this.state.todos.map(todo => {
+    //           if (todo.id === todo_edited.id){
+    //             return todo_item_from_response
+    //           }
+    //           return todo
+    //         })
+    //       })
+    //     })
+    //     .catch(error => {
+    //       console.log(error.response)
+    //     });;
+    // this.setState({todos:this.state.todos.filter(todo=>todo.id !==todoId)})
   }
 
   render() {
