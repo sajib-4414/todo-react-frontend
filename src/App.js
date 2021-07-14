@@ -1,6 +1,6 @@
 import './App.css';
 import AddTodo from "./components/AddTodo";
-import React,{Component} from "react";
+import React from "react";
 import TodoList from "./components/TodoList";
 import './bootstrap/bootstrap.min.css'
 import TodoTypeTabs from "./components/TodoTypeTabs";
@@ -10,55 +10,44 @@ class App extends React.Component{
     todos:[],
     currentType:"All",
   }
-  getId = ()=>{
-    var maximum = 5000
-    var minimum = 1
-    var randomnumber = Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
-    return randomnumber
-  }
-  addTodo = (desc)=>{
-    var todo_item = {
-      id: this.getId(),
-      description:desc,
-      completed: false
+  //this is temporary, it will be replaced by real time login
+  login_auth_credentials = {
+    auth:{
+      username: "tanjim",
+      password: "12345678"
     }
-    this.setState({todos:[...this.state.todos,todo_item]})
-    // axios
-    //     .post("http://127.0.0.1:8000/todonew/",{
-    //       auth: {
-    //         // username: 'tanjim',
-    //         // password: '12345678'
-    //       },
-    //     title:"sample title"})
-    //     .then(val =>    console.log(val.data)
-    //     )
-    const article = { title: "tt",description:desc,due_datetime:"10-10-2020 10:10"}
-    //   auth: {
-    //             username: 'tanjim',
-    //             password: '12345678'
-    //           }};
-    // axios.post('http://127.0.0.1:8000/todonew/', article)
-    //     .then(response => this.setState({ articleId: response.data.id }))
-    //     .catch(error => {
-    //       console.log(error.response)
-    //     });
-    axios.post('http://127.0.0.1:8000/todonew/', article, {
-      auth: {
-        username: "tanjim",
-        password: "12345678"
-      }
-    })
+  }
+  todo_list_and_creation_url = "http://127.0.0.1:8000/todonew/"
+  // getId = ()=>{
+  //   var maximum = 5000
+  //   var minimum = 1
+  //   var randomnumber = Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+  //   return randomnumber
+  // }
+  addTodo = (desc)=>{
+    // var todo_item = {
+    //   id: this.getId(),
+    //   description:desc,
+    //   is_completed: false
+    // }
+
+    const data_payload = { title: "test title",description:desc,due_datetime:"10-10-2020 10:10"}
+    axios.post(this.todo_list_and_creation_url, data_payload, this.login_auth_credentials)
+        .then(results=>{
+          const todo_item = results.data
+          this.setState({todos:[...this.state.todos,todo_item]})
+        })
          .catch(error => {
            console.log(error.response)
          });;
   }
-  getChosenTodos() {
+  getTodosByType() {
     if (this.state.currentType === "Completed")
     {
-      return this.state.todos.filter(todo=>todo.completed)
+      return this.state.todos.filter(todo=>todo.is_completed)
     }
     else if (this.state.currentType === "Active"){
-      return this.state.todos.filter(todo=>!todo.completed)
+      return this.state.todos.filter(todo=>!todo.is_completed)
     }
     return this.state.todos
   }
@@ -66,7 +55,6 @@ class App extends React.Component{
     this.setState({currentType: type})
   }
   updateTodo = todo_edited=>{
-     // alert("I am here for the id "+todoId)
     this.setState({
       todos: this.state.todos.map(todo => {
         if (todo.id === todo_edited.id){
@@ -77,16 +65,11 @@ class App extends React.Component{
     })
   }
   componentDidMount() {
+    //fetching all existing list of todos
     axios
-        .get("http://127.0.0.1:8000/todonew/",{
-          auth: {
-            username: 'tanjim',
-            password: '12345678'
-          }
-        })
-        .then(val =>    this.setState({todos:val.data})
+        .get(this.todo_list_and_creation_url,this.login_auth_credentials)
+        .then(results =>    this.setState({todos:results.data})
         )
-    // console.log(this.state.todos)
   }
 
   ItemDeleteCallBack = todoId =>{
@@ -96,8 +79,6 @@ class App extends React.Component{
   render() {
     return (
         <React.Fragment>
-          {/*<Header/>*/}
-          {/*<body>*/}
           <div className="container">
             <div className="row">
               <div className="col-md-12">
@@ -115,7 +96,7 @@ class App extends React.Component{
                     </ul>
                     <div className="todo-list">
                       <TodoList
-                          todos={this.getChosenTodos()}
+                          todos={this.getTodosByType()}
                           todoUpdateCallBack = {this.updateTodo}
                           ItemDeleteCallBack = {this.ItemDeleteCallBack}
                       />
@@ -128,7 +109,6 @@ class App extends React.Component{
             </div>
           </div>
 
-          {/*</body>*/}
 
         </React.Fragment>
 
