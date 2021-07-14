@@ -1,5 +1,4 @@
 import './App.css';
-import Header from "./Header";
 import AddTodo from "./components/AddTodo";
 import React,{Component} from "react";
 import TodoList from "./components/TodoList";
@@ -70,8 +69,8 @@ class App extends React.Component{
 
   render() {
     return (
-        <React.StrictMode>
-          <Header/>
+        <React.Fragment>
+          {/*<Header/>*/}
           {/*<body>*/}
           <div className="container">
             <div className="row">
@@ -105,7 +104,7 @@ class App extends React.Component{
 
           {/*</body>*/}
 
-        </React.StrictMode>
+        </React.Fragment>
 
 
     );
