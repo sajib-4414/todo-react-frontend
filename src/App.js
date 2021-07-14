@@ -37,16 +37,20 @@ class App extends React.Component{
   changeTodoType = type =>{
     this.setState({currentType: type})
   }
-  changeTodoCompleteStatus = todoId=>{
+  updateTodo = todo_edited=>{
      // alert("I am here for the id "+todoId)
     this.setState({
       todos: this.state.todos.map(todo => {
-        if (todo.id === todoId){
-          todo.completed = !todo.completed
+        if (todo.id === todo_edited.id){
+          return todo_edited
         }
         return todo
       })
     })
+  }
+
+  ItemDeleteCallBack = todoId =>{
+    this.setState({todos:this.state.todos.filter(todo=>todo.id !==todoId)})
   }
 
   render() {
@@ -72,7 +76,8 @@ class App extends React.Component{
                     <div className="todo-list">
                       <TodoList
                           todos={this.getChosenTodos()}
-                          changeTodoCompleteStatus = {this.changeTodoCompleteStatus}
+                          todoUpdateCallBack = {this.updateTodo}
+                          ItemDeleteCallBack = {this.ItemDeleteCallBack}
                       />
                     </div>
 
