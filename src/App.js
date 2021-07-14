@@ -23,7 +23,34 @@ class App extends React.Component{
       completed: false
     }
     this.setState({todos:[...this.state.todos,todo_item]})
-
+    // axios
+    //     .post("http://127.0.0.1:8000/todonew/",{
+    //       auth: {
+    //         // username: 'tanjim',
+    //         // password: '12345678'
+    //       },
+    //     title:"sample title"})
+    //     .then(val =>    console.log(val.data)
+    //     )
+    const article = { title: "tt",description:desc,due_datetime:"10-10-2020 10:10"}
+    //   auth: {
+    //             username: 'tanjim',
+    //             password: '12345678'
+    //           }};
+    // axios.post('http://127.0.0.1:8000/todonew/', article)
+    //     .then(response => this.setState({ articleId: response.data.id }))
+    //     .catch(error => {
+    //       console.log(error.response)
+    //     });
+    axios.post('http://127.0.0.1:8000/todonew/', article, {
+      auth: {
+        username: "tanjim",
+        password: "12345678"
+      }
+    })
+         .catch(error => {
+           console.log(error.response)
+         });;
   }
   getChosenTodos() {
     if (this.state.currentType === "Completed")
@@ -57,10 +84,9 @@ class App extends React.Component{
             password: '12345678'
           }
         })
-        .then(val => {   this.setState({todos:val.data})   }
-
+        .then(val =>    this.setState({todos:val.data})
         )
-    console.log(this.state.todos)
+    // console.log(this.state.todos)
   }
 
   ItemDeleteCallBack = todoId =>{
