@@ -5,6 +5,7 @@ import React,{Component} from "react";
 import TodoList from "./components/TodoList";
 import './bootstrap/bootstrap.min.css'
 import TodoTypeTabs from "./components/TodoTypeTabs";
+import axios from "axios";
 class App extends React.Component{
   state = {
     todos:[],
@@ -23,6 +24,7 @@ class App extends React.Component{
       completed: false
     }
     this.setState({todos:[...this.state.todos,todo_item]})
+
   }
   getChosenTodos() {
     if (this.state.currentType === "Completed")
@@ -48,6 +50,19 @@ class App extends React.Component{
       })
     })
   }
+  componentDidMount() {
+    axios
+        .get("http://127.0.0.1:8000/todonew/",{
+          auth: {
+            username: 'tanjim',
+            password: '12345678'
+          }
+        })
+        .then(val => {   this.setState({todos:val.data})   }
+
+        )
+    console.log(this.state.todos)
+  }
 
   ItemDeleteCallBack = todoId =>{
     this.setState({todos:this.state.todos.filter(todo=>todo.id !==todoId)})
@@ -55,9 +70,9 @@ class App extends React.Component{
 
   render() {
     return (
-        <React.Fragment>
+        <React.StrictMode>
           <Header/>
-          <body>
+          {/*<body>*/}
           <div className="container">
             <div className="row">
               <div className="col-md-12">
@@ -88,9 +103,9 @@ class App extends React.Component{
             </div>
           </div>
 
-          </body>
+          {/*</body>*/}
 
-        </React.Fragment>
+        </React.StrictMode>
 
 
     );
