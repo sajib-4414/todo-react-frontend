@@ -5,6 +5,10 @@ import TodoList from "./components/TodoList";
 import './bootstrap/bootstrap.min.css'
 import TodoTypeTabs from "./components/TodoTypeTabs";
 import axios from "axios";
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+toast.configure()
+
 class App extends React.Component{
   state = {
     todos:[],
@@ -17,29 +21,27 @@ class App extends React.Component{
       password: "12345678"
     }
   }
+  showErrorToast =(message)=>{
+    toast.error(message, {
+      // Set to 15sec
+      position: toast.POSITION.BOTTOM_LEFT, autoClose:15000})
+  }
   todo_list_and_creation_url = "http://127.0.0.1:8000/todonew/"
-  // getId = ()=>{
-  //   var maximum = 5000
-  //   var minimum = 1
-  //   var randomnumber = Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
-  //   return randomnumber
-  // }
+
   addTodo = (desc)=>{
-    // var todo_item = {
-    //   id: this.getId(),
-    //   description:desc,
-    //   is_completed: false
-    // }
 
     const data_payload = { title: "test title",description:desc,due_datetime:"10-10-2020 10:10"}
     axios.post(this.todo_list_and_creation_url, data_payload, this.login_auth_credentials)
         .then(results=>{
           const todo_item = results.data
           this.setState({todos:[...this.state.todos,todo_item]})
+
+          // toast('Hello Geeks')
         })
          .catch(error => {
+           this.showErrorToast("Network error occurred while adding Todo")
            console.log(error.response)
-         });;
+         });
   }
   getTodosByType() {
     if (this.state.currentType === "Completed")
@@ -55,14 +57,24 @@ class App extends React.Component{
     this.setState({currentType: type})
   }
   updateTodo = todo_edited=>{
-    this.setState({
-      todos: this.state.todos.map(todo => {
-        if (todo.id === todo_edited.id){
-          return todo_edited
-        }
-        return todo
-      })
-    })
+    axios.put(this.todo_list_and_creation_url+todo_edited.id+"/", todo_edited, this.login_auth_credentials)
+        .then(results=>{
+          const todo_item_from_response = results.data
+          this.setState({
+            todos: this.state.todos.map(todo => {
+              if (todo.id === todo_edited.id){
+                return todo_item_from_response
+              }
+              return todo
+            })
+          })
+        })
+        .catch(error => {
+          console.log(error.response)
+          this.showErrorToast("Network error occurred updating the Todo")
+        });;
+
+
   }
   componentDidMount() {
     //fetching all existing list of todos
@@ -73,7 +85,13 @@ class App extends React.Component{
   }
 
   ItemDeleteCallBack = todoId =>{
-    this.setState({todos:this.state.todos.filter(todo=>todo.id !==todoId)})
+    axios.delete(this.todo_list_and_creation_url+todoId+"/",this.login_auth_credentials)
+        .then(() => this.setState({todos:this.state.todos.filter(todo=>todo.id !==todoId)}))
+        .catch(error => {
+          this.showErrorToast("Network error occurred deleting Todo")
+          console.log(error.response)
+        })
+    ;
   }
 
   render() {
