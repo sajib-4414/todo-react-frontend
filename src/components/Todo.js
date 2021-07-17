@@ -76,7 +76,7 @@ function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
             <div >
                 <div className="checker"><span className=""><input type="checkbox" checked={!displayingTodo.is_completed?null:"true"}
                                                                    onChange={handleToggle}/></span></div>
-                <span className={displayingTodo.is_completed?"text-strike":null}>{todo.description}</span>
+                <span className={displayingTodo.is_completed?"text-strike":null}>{todo.title}</span>
                 <button type="button" onClick={handleDelete} className="float-right btn-close" aria-label="Close">X</button>
             </div>
             {editMode?
