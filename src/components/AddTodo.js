@@ -1,4 +1,6 @@
 import React,{Component} from "react";
+import {TextField} from "@material-ui/core";
+import { format } from "date-fns";
 
 class AddTodo extends React.Component{
     state = {
@@ -9,10 +11,13 @@ class AddTodo extends React.Component{
     }
     handleSubmit = formEvent =>{
         formEvent.preventDefault()
+        const date = new Date(this.state.currentTodoDueDate);
+        const formattedDate = format(date, "dd-MM-yyyy H:mm");
+
         const todo_object = {
             title: this.state.currentTodoTitle,
             description: this.state.currentTodoDescription,
-            due_datetime: this.state.currentTodoDueDate
+            due_datetime: formattedDate
         }
         this.props.recieveTodoFromForm(todo_object)
         this.setState({
@@ -38,11 +43,18 @@ class AddTodo extends React.Component{
                        value={this.state.currentTodoDescription}
                        onChange={this.handleInputChange}
                        placeholder="New Todo Description..."/>
-                <input type="text" placeholder="Enter datetime"
-                value={this.state.currentTodoDueDate}
-                       className="form-control"
-                       onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
-                onChange={event=>this.setState({currentTodoDueDate:event.target.value})}/>
+                <TextField
+                    id="datetime-local"
+                    label="Next appointment"
+                    type="datetime-local"
+                    value={this.state.currentTodoDueDate}
+                    onChange={event=>this.setState({currentTodoDueDate:event.target.value})}
+                    onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+
+                />
                 <button type="submit" className="btn btn-primary">Confirm Add</button>
             </form>
         )
