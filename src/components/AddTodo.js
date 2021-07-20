@@ -8,26 +8,44 @@ class AddTodo extends React.Component{
         currentTodoTitle:"",
         currentTodoDueDate:"",
         errors:{
-            titleError: "",
-            descriptionError:"",
-            dueDateError:""
+            currentTodoTitle: "",
+            currentTodoDescription:"",
+            currentTodoDueDate:""
         }
     }
     handleSubmit = formEvent =>{
         formEvent.preventDefault()
-        const date = new Date(this.state.currentTodoDueDate);
-        const formattedDate = format(date, "dd-MM-yyyy H:mm");
+        //check for empty fileds
+        const state_map = this.state
+        const all_errors = {}
+        Object.keys(state_map).forEach(
+            key =>{
+                if (key !=="errors" && state_map[key] === ""){
+                        all_errors[key] = "This field cannot be left empty"
 
-        const todo_object = {
-            title: this.state.currentTodoTitle,
-            description: this.state.currentTodoDescription,
-            due_datetime: formattedDate
-        }
-        this.props.recieveTodoFromForm(todo_object)
-        this.setState({
-            currentTodoDescription:"",
-            currentTodoTitle:"",
-            currentTodoDueDate:""})
+                }
+
+            }
+        )
+        console.log(all_errors)
+        this.setState({errors: all_errors})
+
+        //end check for empty filed
+
+
+        // const date = new Date(this.state.currentTodoDueDate);
+        // const formattedDate = format(date, "dd-MM-yyyy H:mm");
+        //
+        // const todo_object = {
+        //     title: this.state.currentTodoTitle,
+        //     description: this.state.currentTodoDescription,
+        //     due_datetime: formattedDate
+        // }
+        // this.props.recieveTodoFromForm(todo_object)
+        // this.setState({
+        //     currentTodoDescription:"",
+        //     currentTodoTitle:"",
+        //     currentTodoDueDate:""})
     }
     handleChange = inputEvent =>{
         this.setState({ [inputEvent.target.name]:inputEvent.target.value})
@@ -39,14 +57,14 @@ class AddTodo extends React.Component{
                 if (target_value === ""){
                     this.setState({
                         errors:{...this.state.errors,
-                            titleError:"Title cannot be left empty"
+                            currentTodoTitle:"Title cannot be left empty"
                         }
                     })
                 }
                 else{
                     this.setState({
                         errors:{...this.state.errors,
-                            titleError:""
+                            currentTodoTitle:""
                         }
                     })
                 }
@@ -55,14 +73,14 @@ class AddTodo extends React.Component{
                 if (target_value === ""){
                     this.setState({
                         errors:{...this.state.errors,
-                            descriptionError:"Description cannot be left empty"
+                            currentTodoDescription:"Description cannot be left empty"
                         }
                     })
                 }
                 else{
                     this.setState({
                         errors:{...this.state.errors,
-                            descriptionError:""
+                            currentTodoDescription:""
                         }
                     })
                 }
@@ -71,14 +89,14 @@ class AddTodo extends React.Component{
                 if (target_value === ""){
                     this.setState({
                         errors:{...this.state.errors,
-                            dueDateError:"Due date cannot be left empty"
+                            currentTodoDueDate:"Due date cannot be left empty"
                         }
                     })
                 }
                 else{
                     this.setState({
                         errors:{...this.state.errors,
-                            dueDateError:""
+                            currentTodoDueDate:""
                         }
                     })
                 }
@@ -98,7 +116,7 @@ class AddTodo extends React.Component{
                            onChange={this.handleChange}
                            className="form-control"/>
                     <small  id="title_error" className="text-danger">
-                        {this.state.errors.titleError}
+                        {this.state.errors.currentTodoTitle}
                     </small>
                 </div>
                 <div>
@@ -109,7 +127,7 @@ class AddTodo extends React.Component{
                          onChange={this.handleChange}
                          placeholder="New Todo Description..."/>
                     <small id="title_error" className="text-danger">
-                        {this.state.errors.descriptionError}
+                        {this.state.errors.currentTodoDescription}
                     </small>
                 </div>
 
@@ -129,7 +147,7 @@ class AddTodo extends React.Component{
 
                     />
                     <small id="title_error" className="text-danger">
-                        {this.state.errors.dueDateError}
+                        {this.state.errors.currentTodoDueDate}
                     </small>
                 </div>
                     <button style={{marginTop:10}} type="submit" className="btn btn-primary">Confirm Add</button>
