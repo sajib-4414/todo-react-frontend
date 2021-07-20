@@ -6,8 +6,12 @@ class AddTodo extends React.Component{
     state = {
         currentTodoDescription:"",
         currentTodoTitle:"",
-        currentTodoDueDate:""
-        
+        currentTodoDueDate:"",
+        errors:{
+            titleError: "",
+            descriptionError:"",
+            dueDateError:""
+        }
     }
     handleSubmit = formEvent =>{
         formEvent.preventDefault()
@@ -25,37 +29,111 @@ class AddTodo extends React.Component{
             currentTodoTitle:"",
             currentTodoDueDate:""})
     }
-    handleInputChange = inputEvent =>{
-        this.setState({currentTodoDescription:inputEvent.target.value})
+    handleChange = inputEvent =>{
+        this.setState({ [inputEvent.target.name]:inputEvent.target.value})
+        const target_name = inputEvent.target.name
+        const target_value = inputEvent.target.value
+        // console.log(target_name)
+        switch (target_name){
+            case "currentTodoTitle":
+                if (target_value === ""){
+                    this.setState({
+                        errors:{...this.state.errors,
+                            titleError:"Title cannot be left empty"
+                        }
+                    })
+                }
+                else{
+                    this.setState({
+                        errors:{...this.state.errors,
+                            titleError:""
+                        }
+                    })
+                }
+                break
+            case "currentTodoDescription":
+                if (target_value === ""){
+                    this.setState({
+                        errors:{...this.state.errors,
+                            descriptionError:"Description cannot be left empty"
+                        }
+                    })
+                }
+                else{
+                    this.setState({
+                        errors:{...this.state.errors,
+                            descriptionError:""
+                        }
+                    })
+                }
+                break
+            case "currentTodoDueDate":
+                if (target_value === ""){
+                    this.setState({
+                        errors:{...this.state.errors,
+                            dueDateError:"Due date cannot be left empty"
+                        }
+                    })
+                }
+                else{
+                    this.setState({
+                        errors:{...this.state.errors,
+                            dueDateError:""
+                        }
+                    })
+                }
+                break
+
+        }
     }
     render() {
         return(
             <form onSubmit={this.handleSubmit}>
+                <div>
+                    <input name="currentTodoTitle"
+                        type="text"
+                           onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
+                           placeholder="New Task title"
+                           value={this.state.currentTodoTitle}
+                           onChange={this.handleChange}
+                           className="form-control"/>
+                    <small  id="title_error" className="text-danger">
+                        {this.state.errors.titleError}
+                    </small>
+                </div>
+                <div>
+                     <textarea
+                         name="currentTodoDescription"
+                         className="form-control add-task"
+                         value={this.state.currentTodoDescription}
+                         onChange={this.handleChange}
+                         placeholder="New Todo Description..."/>
+                    <small id="title_error" className="text-danger">
+                        {this.state.errors.descriptionError}
+                    </small>
+                </div>
 
-                <input type="text"
-                       onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
-                placeholder="New Task title"
-                       value={this.state.currentTodoTitle}
-                       onChange={event=>this.setState({currentTodoTitle:event.target.value})}
-                       className="form-control"/>
-                <textarea
-                       className="form-control add-task"
-                       value={this.state.currentTodoDescription}
-                       onChange={this.handleInputChange}
-                       placeholder="New Todo Description..."/>
-                <TextField
-                    id="datetime-local"
-                    label="Next appointment"
-                    type="datetime-local"
-                    value={this.state.currentTodoDueDate}
-                    onChange={event=>this.setState({currentTodoDueDate:event.target.value})}
-                    onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
+                <div>
+                    <TextField
+                        name="currentTodoDueDate"
+                        id="datetime-local"
+                        label="Next appointment"
+                        type="datetime-local"
+                        className="form-control"
+                        value={this.state.currentTodoDueDate}
+                        onChange={this.handleChange}
+                        onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
 
-                />
-                <button type="submit" className="btn btn-primary">Confirm Add</button>
+                    />
+                    <small id="title_error" className="text-danger">
+                        {this.state.errors.dueDateError}
+                    </small>
+                </div>
+                    <button style={{marginTop:10}} type="submit" className="btn btn-primary">Confirm Add</button>
+
             </form>
         )
     }
