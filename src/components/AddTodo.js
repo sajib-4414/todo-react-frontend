@@ -18,10 +18,17 @@ class AddTodo extends React.Component{
         //check for empty fileds
         const state_map = this.state
         const all_errors = {}
+        const existing_errors = this.state.errors
         Object.keys(state_map).forEach(
             key =>{
                 if (key !=="errors" && state_map[key] === ""){
+                    if (existing_errors[key].length > 0){
+                        all_errors[key] = existing_errors[key]
+                    }
+                    else{
                         all_errors[key] = "This field cannot be left empty"
+                    }
+
 
                 }
 
