@@ -38,21 +38,24 @@ class AddTodo extends React.Component{
         this.setState({errors: all_errors})
 
         //end check for empty filed
+        if (Object.keys(all_errors).length === 0){
+            const date = new Date(this.state.currentTodoDueDate);
+            const formattedDate = format(date, "dd-MM-yyyy H:mm");
+
+            const todo_object = {
+                title: this.state.currentTodoTitle,
+                description: this.state.currentTodoDescription,
+                due_datetime: formattedDate
+            }
+            this.props.recieveTodoFromForm(todo_object)
+            this.setState({
+                currentTodoDescription:"",
+                currentTodoTitle:"",
+                currentTodoDueDate:""})
+        }
 
 
-        // const date = new Date(this.state.currentTodoDueDate);
-        // const formattedDate = format(date, "dd-MM-yyyy H:mm");
-        //
-        // const todo_object = {
-        //     title: this.state.currentTodoTitle,
-        //     description: this.state.currentTodoDescription,
-        //     due_datetime: formattedDate
-        // }
-        // this.props.recieveTodoFromForm(todo_object)
-        // this.setState({
-        //     currentTodoDescription:"",
-        //     currentTodoTitle:"",
-        //     currentTodoDueDate:""})
+
     }
     handleChange = inputEvent =>{
         this.setState({ [inputEvent.target.name]:inputEvent.target.value})
