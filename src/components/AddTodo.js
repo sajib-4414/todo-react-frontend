@@ -21,11 +21,23 @@ class AddTodo extends React.Component{
         const existing_errors = this.state.errors
         Object.keys(state_map).forEach(
             key =>{
-                if (key !=="errors" && state_map[key] === ""){
+                //we just need to iterate over all the keys of the state, not the error, because, the error
+                //have already these keys inside the error.
+                //for each key we check do we have any empty values in the state, empty means
+                //we have to show field is required
+                // we also check if we have an existing errors for any key
+                //in the state.errors, if we have something such as Date validation fail, invalid character
+                //then we keep it as it is, so we see we take the error from the existing error object
+                if (key !=="errors" && (state_map[key] === "" || existing_errors[key].length > 0)){
+                    // console.log("Hi I am here inside 2.2")
                     if (existing_errors[key].length > 0){
+                        //console.log("Hi I am here inside 2.3 for key"+key)
+                       // console.log(all_errors)
                         all_errors[key] = existing_errors[key]
+                       // console.log(all_errors)
                     }
                     else{
+                      //  console.log("Hi I am here inside 2.4")
                         all_errors[key] = "This field cannot be left empty"
                     }
 
@@ -34,7 +46,7 @@ class AddTodo extends React.Component{
 
             }
         )
-        console.log(all_errors)
+        //console.log(all_errors)
         this.setState({errors: all_errors})
 
         //end check for empty filed
@@ -58,10 +70,10 @@ class AddTodo extends React.Component{
 
     }
     handleChange = inputEvent =>{
-        this.setState({ [inputEvent.target.name]:inputEvent.target.value})
+        // alert("Hi I am clicked")
+        // console.log(target_name)
         const target_name = inputEvent.target.name
         const target_value = inputEvent.target.value
-        // console.log(target_name)
         switch (target_name){
             case "currentTodoTitle":
                 if (target_value === ""){
@@ -78,6 +90,8 @@ class AddTodo extends React.Component{
                         }
                     })
                 }
+              //  console.log("After switch case currentTOdoTItle")
+                //console.log(this.state.errors)
                 break
             case "currentTodoDescription":
                 if (target_value === ""){
@@ -94,6 +108,8 @@ class AddTodo extends React.Component{
                         }
                     })
                 }
+              //  console.log("After switch case currentTodoDescription")
+              //  console.log(this.state.errors)
                 break
             case "currentTodoDueDate":
                 if (target_value === ""){
@@ -104,15 +120,38 @@ class AddTodo extends React.Component{
                     })
                 }
                 else{
-                    this.setState({
-                        errors:{...this.state.errors,
-                            currentTodoDueDate:""
-                        }
-                    })
+                    //check for future dates
+                    let today = new Date();
+                    today.setHours(0,0,0,0);
+                    const givenDate = new Date(target_value);
+                  //  console.log(today)
+                   // console.log(this.state.currentTodoDueDate)
+                    if (givenDate <= today){
+                        //console.log(this.state.errors)
+                       // console.log("Hi I am her 3.2")
+                        //console.log(this.state.errors)
+                        this.setState({
+                            errors:{...this.state.errors,
+                                currentTodoDueDate:"Date is invalid, has to be a future date"
+                            }
+                        })
+                    }
+                    else{
+                      //  console.log("Hi am here 3.3")
+                        this.setState({
+                            errors:{...this.state.errors,
+                                currentTodoDueDate:""
+                            }
+                        })
+                    }
                 }
+              //  console.log("After switch case currentTodoDueDate")
+                //console.log(this.state.errors)
                 break
 
         }
+        this.setState({ [inputEvent.target.name]:inputEvent.target.value})
+
     }
     render() {
         return(
