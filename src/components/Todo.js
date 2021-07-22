@@ -61,20 +61,10 @@ function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
             setEditMode(!editMode)
         }
     }
-    function handleFormSubmit(formEvent){
-        formEvent.preventDefault()
-        todoUpdateCallBack(displayingTodo)
+    function submitTodoForEdit(todo_editted){
+        todoUpdateCallBack(todo_editted)
         setEditMode(!editMode)
-
     }
-    function handleEditInputChange(inputEvent){
-        setDisplayingTodo({id: todo.id, description: inputEvent.target.value, is_completed: todo.is_completed})
-
-    }
-    // function handleCancelButtonClick(){
-    //
-    // }
-    //console.log(displayingTodo)
 
 
     return (
@@ -88,7 +78,8 @@ function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
             {editMode?
                 <EditTodo
                 todo_edit={todo_to_be_editted.current}
-                cancelHandler={handleEditCancelButtonClick}/>
+                cancelHandler={handleEditCancelButtonClick}
+                editCallBackToTodo = {submitTodoForEdit}/>
                 : <button type="button" onClick={handleEditCancelButtonClick} className=" btn btn-secondary" aria-label="Close">Edit</button>
             }
 

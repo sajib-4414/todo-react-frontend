@@ -47,13 +47,13 @@ class AddTodo extends React.Component{
 
         //checking if there was no error, and it is ok to go
         if (Object.keys(all_errors).length === 0){
-            const date = new Date(this.state.currentTodoDueDate);
-            const formattedDate = format(date, "dd-MM-yyyy H:mm");
+            //const date = new Date(this.state.currentTodoDueDate);
+            //const formattedDate = format(date, "dd-MM-yyyy H:mm");
 
             const todo_object = {
                 title: this.state.currentTodoTitle,
                 description: this.state.currentTodoDescription,
-                due_datetime: formattedDate
+                due_datetime: this.state.currentTodoDueDate
             }
             this.props.recieveTodoFromForm(todo_object)
 

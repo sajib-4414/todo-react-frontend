@@ -7,6 +7,7 @@ import TodoTypeTabs from "./components/TodoTypeTabs";
 import axios from "axios";
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {format} from "date-fns";
 toast.configure()
 
 class App extends React.Component{
@@ -27,9 +28,15 @@ class App extends React.Component{
       position: toast.POSITION.BOTTOM_LEFT, autoClose:15000})
   }
   todo_list_and_creation_url = "http://127.0.0.1:8000/todonew/"
+    convert_datetime(inputString){
+        const date = new Date(inputString);
+        const formattedDate = format(date, "dd-MM-yyyy H:mm");
+        return formattedDate
+    }
 
   addTodo = (todo_payload)=>{
-      console.log(todo_payload)
+      //console.log(todo_payload)
+      todo_payload.due_datetime = this.convert_datetime(todo_payload.due_datetime)
 
     // const data_payload = { title: todo_payload.title,description:desc,due_datetime:"10-10-2020 10:10"}
     axios.post(this.todo_list_and_creation_url, todo_payload, this.login_auth_credentials)
@@ -58,6 +65,17 @@ class App extends React.Component{
     this.setState({currentType: type})
   }
   updateTodo = todo_edited=>{
+      todo_edited.due_datetime = this.convert_datetime(todo_edited.due_datetime)
+      const todo_copy = {...todo_edited}
+      Object.keys(todo_copy).forEach(
+          key =>{
+              if (todo_copy[key]==null){
+                  delete todo_edited[key]
+              }
+          }
+      )
+      console.log("THis is the payload to be editted")
+      console.log(todo_edited)
     axios.put(this.todo_list_and_creation_url+todo_edited.id+"/", todo_edited, this.login_auth_credentials)
         .then(results=>{
           const todo_item_from_response = results.data
