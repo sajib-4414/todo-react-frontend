@@ -2,9 +2,13 @@ import React, {useState, useRef, useEffect} from "react";
 import '../designs/Todo.css'
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import EditTodo from "./EditTodo"; // Import css
+import EditTodo from "./EditTodo";
+import {Accordion} from "@material-ui/core";
+import AccordionExample from "./AccordionExample";
+import {format} from "date-fns"; // Import css
 function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
     const [editMode, setEditMode] = useState(false);
+    const [isDetailMode,setIsDetailMode] = useState(false)
     const [displayingTodo, setDisplayingTodo] = useState(todo);
     const todo_to_be_editted= useRef(todo);
 
@@ -48,10 +52,13 @@ function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
         todo_to_be_editted.current = editted_todo
 
     }
+    const handleDetailModeToggle = ()=>{
+        setIsDetailMode(!isDetailMode)
+    }
     function handleDelete(){
         confirmAlert(options);
-
     }
+
     function handleEditCancelButtonClick(){
         // alert("Hi I am here")
         if (!editMode){
@@ -69,13 +76,46 @@ function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
         setEditMode(!editMode)
     }
 
+    const showFamiliarDueDate = (inputTimeString)=>{
+        const dt = new Date(inputTimeString);
+        const dtDateOnly = new Date(dt.valueOf() + dt.getTimezoneOffset() * 60 * 1000);
+
+        //const date = new Date(timeToShow);
+        //for formatting help visit documentation
+        //https://date-fns.org/v2.22.1/docs/format
+        const formattedDate = format(dtDateOnly, "do MMMM yyyy p");
+        console.log("converted time is "+formattedDate)
+      //  let time = formattedDate.split(' ')[1];
+        //const hours = time.split(':')[0]
+        // if(hours.length === 1){
+        //     time = "0"+time
+        // }
+        // const outputTime = formattedDate.split(' ')[0] + "T"+ time;
+        return formattedDate
+    }
 
     return (
         <div className="todo-item">
+
             <div >
                 <div className="checker"><span className=""><input type="checkbox" checked={!displayingTodo.is_completed?null:"true"}
                                                                    onChange={handleToggle}/></span></div>
+                <label>Title:</label>
                 <span className={displayingTodo.is_completed?"text-strike":null}>{todo.title}</span>
+                <button onClick={handleDetailModeToggle}> {isDetailMode ? '-' : '+' }</button>
+                {isDetailMode ?
+                    <div>
+                        <div>
+                            <label>Description</label>
+                            <p>{displayingTodo.description}</p>
+                        </div>
+                        <div>
+                            <label>Due date</label>
+                            <p>{showFamiliarDueDate(displayingTodo.due_datetime)}</p>
+                        </div>
+                    </div>
+                    : '' }
+
                 <button type="button" onClick={handleDelete} className="float-right btn-close" aria-label="Close">X</button>
             </div>
             {editMode?
