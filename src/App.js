@@ -28,10 +28,11 @@ class App extends React.Component{
   }
   todo_list_and_creation_url = "http://127.0.0.1:8000/todonew/"
 
-  addTodo = (desc)=>{
+  addTodo = (todo_payload)=>{
+      console.log(todo_payload)
 
-    const data_payload = { title: "test title",description:desc,due_datetime:"10-10-2020 10:10"}
-    axios.post(this.todo_list_and_creation_url, data_payload, this.login_auth_credentials)
+    // const data_payload = { title: todo_payload.title,description:desc,due_datetime:"10-10-2020 10:10"}
+    axios.post(this.todo_list_and_creation_url, todo_payload, this.login_auth_credentials)
         .then(results=>{
           const todo_item = results.data
           this.setState({todos:[...this.state.todos,todo_item]})
