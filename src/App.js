@@ -31,6 +31,8 @@ class App extends React.Component{
     convert_datetime(inputString){
         const date = new Date(inputString);
         const formattedDate = format(date, "dd-MM-yyyy H:mm");
+        //console.log("Date is being converted")
+       // console.log("Before: "+inputString+", after: "+formattedDate)
         return formattedDate
     }
 
@@ -102,7 +104,12 @@ class App extends React.Component{
     //fetching all existing list of todos
     axios
         .get(this.todo_list_and_creation_url,this.login_auth_credentials)
-        .then(results =>    this.setState({todos:results.data})
+        .then(results =>
+        {
+            this.setState({todos:results.data})
+            console.log("These are results of get call")
+            console.log(results.data)
+        }
         )
   }
 

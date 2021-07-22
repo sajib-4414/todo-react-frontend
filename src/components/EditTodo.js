@@ -4,20 +4,33 @@ import {format} from "date-fns";
 
 
 function EditTodo({todo_edit,cancelHandler, editCallBackToTodo}){
-    const date = new Date(todo_edit.due_datetime);
-    const formattedDate = format(date, "yyyy-MM-dd H:mm");
-    let time = formattedDate.split(' ')[1];
-    const hours = time.split(':')[0]
-    if(hours.length === 1){
-        time = "0"+time
-    }
-    todo_edit.due_datetime = formattedDate.split(' ')[0] + "T"+ time;
+
+
     const [todo, setTodo] = useState(todo_edit);
     let error_object = {}
     Object.keys(todo).forEach(key=>{
         error_object[key] = ""
     })
     const [errors,setErrors] = useState(error_object)
+    function showTime(timeToShow){
+        console.log("THe time I got is "+timeToShow)
+
+
+        const dt = new Date(timeToShow);
+        const dtDateOnly = new Date(dt.valueOf() + dt.getTimezoneOffset() * 60 * 1000);
+        //const date = new Date(timeToShow);
+        const formattedDate = format(dtDateOnly, "yyyy-MM-dd H:mm");
+        let time = formattedDate.split(' ')[1];
+        const hours = time.split(':')[0]
+        if(hours.length === 1){
+            time = "0"+time
+        }
+        const outputTime = formattedDate.split(' ')[0] + "T"+ time;
+        console.log("After conversion, the time is : "+outputTime)
+
+
+        return outputTime
+    }
 
     const handleChange = inputEvent=>{
 
@@ -112,7 +125,7 @@ function EditTodo({todo_edit,cancelHandler, editCallBackToTodo}){
         }
 
     }
-    console.log(todo_edit)
+   // console.log(todo_edit)
     return(
         <div>
             <form onSubmit={handleSubmit}>
@@ -138,7 +151,7 @@ function EditTodo({todo_edit,cancelHandler, editCallBackToTodo}){
                     label="Next appointment"
                     type="datetime-local"
                     className="form-control"
-                    defaultValue={todo.due_datetime}
+                    defaultValue={showTime(todo.due_datetime)}
                     onChange={handleChange}
                     onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                     InputLabelProps={{
