@@ -15,7 +15,7 @@ class AddTodo extends React.Component{
     }
     handleSubmit = formEvent =>{
         formEvent.preventDefault()
-        //check for empty fileds
+
         const state_map = this.state
         const all_errors = {}
         const existing_errors = this.state.errors
@@ -29,15 +29,12 @@ class AddTodo extends React.Component{
                 //in the state.errors, if we have something such as Date validation fail, invalid character
                 //then we keep it as it is, so we see we take the error from the existing error object
                 if (key !=="errors" && (state_map[key] === "" || existing_errors[key].length > 0)){
-                    // console.log("Hi I am here inside 2.2")
                     if (existing_errors[key].length > 0){
-                        //console.log("Hi I am here inside 2.3 for key"+key)
-                       // console.log(all_errors)
+                        //check if this field (checked by key) had already an error or not
                         all_errors[key] = existing_errors[key]
-                       // console.log(all_errors)
                     }
                     else{
-                      //  console.log("Hi I am here inside 2.4")
+                        //just show this field is required
                         all_errors[key] = "This field cannot be left empty"
                     }
 
@@ -46,10 +43,9 @@ class AddTodo extends React.Component{
 
             }
         )
-        //console.log(all_errors)
         this.setState({errors: all_errors})
 
-        //end check for empty filed
+        //checking if there was no error, and it is ok to go
         if (Object.keys(all_errors).length === 0){
             const date = new Date(this.state.currentTodoDueDate);
             const formattedDate = format(date, "dd-MM-yyyy H:mm");
@@ -60,18 +56,26 @@ class AddTodo extends React.Component{
                 due_datetime: formattedDate
             }
             this.props.recieveTodoFromForm(todo_object)
+
+            //reverting the state of this component to previous state
             this.setState({
                 currentTodoDescription:"",
                 currentTodoTitle:"",
-                currentTodoDueDate:""})
+                currentTodoDueDate:"",
+                errors:{
+                    currentTodoTitle: "",
+                    currentTodoDescription:"",
+                    currentTodoDueDate:""
+                }
+            })
         }
 
 
 
     }
+
+    //this handles change for all the input field events
     handleChange = inputEvent =>{
-        // alert("Hi I am clicked")
-        // console.log(target_name)
         const target_name = inputEvent.target.name
         const target_value = inputEvent.target.value
         switch (target_name){
