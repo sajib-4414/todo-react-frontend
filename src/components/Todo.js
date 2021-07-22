@@ -2,8 +2,6 @@ import React, {useState, useRef, useEffect} from "react";
 import '../designs/Todo.css'
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import {TextField} from "@material-ui/core";
-import {format} from "date-fns";
 import EditTodo from "./EditTodo"; // Import css
 function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
     const [editMode, setEditMode] = useState(false);

@@ -1,6 +1,5 @@
-import React,{Component} from "react";
+import React from "react";
 import {TextField} from "@material-ui/core";
-import { format } from "date-fns";
 
 class AddTodo extends React.Component{
     state = {
@@ -47,8 +46,6 @@ class AddTodo extends React.Component{
 
         //checking if there was no error, and it is ok to go
         if (Object.keys(all_errors).length === 0){
-            //const date = new Date(this.state.currentTodoDueDate);
-            //const formattedDate = format(date, "dd-MM-yyyy H:mm");
 
             const todo_object = {
                 title: this.state.currentTodoTitle,
@@ -94,8 +91,6 @@ class AddTodo extends React.Component{
                         }
                     })
                 }
-              //  console.log("After switch case currentTOdoTItle")
-                //console.log(this.state.errors)
                 break
             case "currentTodoDescription":
                 if (target_value === ""){
@@ -112,8 +107,6 @@ class AddTodo extends React.Component{
                         }
                     })
                 }
-              //  console.log("After switch case currentTodoDescription")
-              //  console.log(this.state.errors)
                 break
             case "currentTodoDueDate":
                 if (target_value === ""){
@@ -131,9 +124,6 @@ class AddTodo extends React.Component{
                   //  console.log(today)
                    // console.log(this.state.currentTodoDueDate)
                     if (givenDate <= today){
-                        //console.log(this.state.errors)
-                       // console.log("Hi I am her 3.2")
-                        //console.log(this.state.errors)
                         this.setState({
                             errors:{...this.state.errors,
                                 currentTodoDueDate:"Date is invalid, has to be a future date"
@@ -141,7 +131,6 @@ class AddTodo extends React.Component{
                         })
                     }
                     else{
-                      //  console.log("Hi am here 3.3")
                         this.setState({
                             errors:{...this.state.errors,
                                 currentTodoDueDate:""
@@ -149,8 +138,6 @@ class AddTodo extends React.Component{
                         })
                     }
                 }
-              //  console.log("After switch case currentTodoDueDate")
-                //console.log(this.state.errors)
                 break
 
         }
