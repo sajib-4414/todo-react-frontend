@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, {useState, useRef, useEffect} from "react";
 import '../designs/Todo.css'
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -10,6 +10,10 @@ function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
     const [displayingTodo, setDisplayingTodo] = useState(todo);
     const todo_to_be_editted= useRef(todo);
 
+    useEffect(() => {
+        setDisplayingTodo(todo)
+        todo_to_be_editted.current = todo
+    }, [todo]);
 
     const options = {
         title: 'Confirm delete?',
