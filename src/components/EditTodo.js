@@ -4,8 +4,6 @@ import {format} from "date-fns";
 
 
 function EditTodo({todo_edit,cancelHandler, editCallBackToTodo}){
-
-
     const [todo, setTodo] = useState(todo_edit);
     let error_object = {}
     Object.keys(todo).forEach(key=>{
@@ -13,12 +11,10 @@ function EditTodo({todo_edit,cancelHandler, editCallBackToTodo}){
     })
     const [errors,setErrors] = useState(error_object)
     function showTime(timeToShow){
-     //   console.log("THe time I got is "+timeToShow)
 
 
         const dt = new Date(timeToShow);
         const dtDateOnly = new Date(dt.valueOf() + dt.getTimezoneOffset() * 60 * 1000);
-        //const date = new Date(timeToShow);
         const formattedDate = format(dtDateOnly, "yyyy-MM-dd H:mm");
         let time = formattedDate.split(' ')[1];
         const hours = time.split(':')[0]
@@ -26,9 +22,6 @@ function EditTodo({todo_edit,cancelHandler, editCallBackToTodo}){
             time = "0"+time
         }
         const outputTime = formattedDate.split(' ')[0] + "T"+ time;
-      //  console.log("After conversion, the time is : "+outputTime)
-
-
         return outputTime
     }
 
@@ -40,7 +33,6 @@ function EditTodo({todo_edit,cancelHandler, editCallBackToTodo}){
         switch (target_name){
             case "title":
                 if (target_value === ""){
-                   // alert("Hi I am here tit;e")
                     setErrors(
                         {...errors,
                             title:"Title cannot be left empty"}
@@ -53,8 +45,6 @@ function EditTodo({todo_edit,cancelHandler, editCallBackToTodo}){
                             title:""}
                     )
                 }
-                //  console.log("After switch case currentTOdoTItle")
-                //console.log(this.state.errors)
                 break
             case "description":
               //  alert("Hi I am here desc")
@@ -70,11 +60,8 @@ function EditTodo({todo_edit,cancelHandler, editCallBackToTodo}){
                             description:""}
                     )
                 }
-                //  console.log("After switch case currentTodoDescription")
-                //  console.log(this.state.errors)
                 break
             case "due_datetime":
-              //  alert("Hi I am here date")
                 if (target_value === ""){
                     setErrors(
                         {...errors,
