@@ -1,11 +1,17 @@
-import React,{ useState } from "react";
+import React, {useState, useRef, useEffect} from "react";
 import '../designs/Todo.css'
 import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import EditTodo from "./EditTodo"; // Import css
 function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
     const [editMode, setEditMode] = useState(false);
     const [displayingTodo, setDisplayingTodo] = useState(todo);
+    const todo_to_be_editted= useRef(todo);
 
+    useEffect(() => {
+        setDisplayingTodo(todo)
+        todo_to_be_editted.current = todo
+    }, [todo]);
 
     const options = {
         title: 'Confirm delete?',
@@ -39,6 +45,7 @@ function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
         const editted_todo = {id: todo.id, description: displayingTodo.description, is_completed: !todo.is_completed}
         todoUpdateCallBack(editted_todo)
         setDisplayingTodo(editted_todo)
+        todo_to_be_editted.current = editted_todo
 
     }
     function handleDelete(){
@@ -57,19 +64,11 @@ function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
             setEditMode(!editMode)
         }
     }
-    function handleFormSubmit(formEvent){
-        formEvent.preventDefault()
-        todoUpdateCallBack(displayingTodo)
+    function submitTodoForEdit(todo_editted){
+        todoUpdateCallBack(todo_editted)
         setEditMode(!editMode)
-
     }
-    function handleEditInputChange(inputEvent){
-        setDisplayingTodo({id: todo.id, description: inputEvent.target.value, is_completed: todo.is_completed})
 
-    }
-    // function handleCancelButtonClick(){
-    //
-    // }
 
     return (
         <div className="todo-item">
@@ -80,13 +79,10 @@ function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
                 <button type="button" onClick={handleDelete} className="float-right btn-close" aria-label="Close">X</button>
             </div>
             {editMode?
-                <div>
-                    <form onSubmit={handleFormSubmit}>
-                        <input value={displayingTodo.description} onChange={handleEditInputChange} placeholder="Enter the edit text"/>
-                        <button type="submit">Submit</button>
-                        <button type="button" onClick={handleEditCancelButtonClick}>Cancel</button>
-                    </form>
-                </div>
+                <EditTodo
+                todo_edit={todo_to_be_editted.current}
+                cancelHandler={handleEditCancelButtonClick}
+                editCallBackToTodo = {submitTodoForEdit}/>
                 : <button type="button" onClick={handleEditCancelButtonClick} className=" btn btn-secondary" aria-label="Close">Edit</button>
             }
 
