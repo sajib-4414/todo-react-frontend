@@ -13,7 +13,7 @@ function EditTodo({todo_edit,cancelHandler, editCallBackToTodo}){
     })
     const [errors,setErrors] = useState(error_object)
     function showTime(timeToShow){
-        console.log("THe time I got is "+timeToShow)
+     //   console.log("THe time I got is "+timeToShow)
 
 
         const dt = new Date(timeToShow);
@@ -26,7 +26,7 @@ function EditTodo({todo_edit,cancelHandler, editCallBackToTodo}){
             time = "0"+time
         }
         const outputTime = formattedDate.split(' ')[0] + "T"+ time;
-        console.log("After conversion, the time is : "+outputTime)
+      //  console.log("After conversion, the time is : "+outputTime)
 
 
         return outputTime
