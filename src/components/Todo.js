@@ -45,6 +45,7 @@ function Todo({todo,todoUpdateCallBack, notifyItemDelete}) {
         const editted_todo = {id: todo.id, description: displayingTodo.description, is_completed: !todo.is_completed}
         todoUpdateCallBack(editted_todo)
         setDisplayingTodo(editted_todo)
+        todo_to_be_editted.current = editted_todo
 
     }
     function handleDelete(){

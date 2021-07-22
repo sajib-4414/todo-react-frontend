@@ -65,7 +65,10 @@ class App extends React.Component{
     this.setState({currentType: type})
   }
   updateTodo = todo_edited=>{
-      todo_edited.due_datetime = this.convert_datetime(todo_edited.due_datetime)
+      if ('due_datetime' in todo_edited){
+             todo_edited.due_datetime = this.convert_datetime(todo_edited.due_datetime)
+      }
+
       const todo_copy = {...todo_edited}
       Object.keys(todo_copy).forEach(
           key =>{
