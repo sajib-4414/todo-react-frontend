@@ -1,14 +1,15 @@
 import './App.css';
+import axiosInstance from "../src/axiosInstance";
 import AddTodo from "./components/AddTodo";
 import React from "react";
 import TodoList from "./components/TodoList";
 import './bootstrap/bootstrap.min.css'
 import TodoTypeTabs from "./components/TodoTypeTabs";
-import axios from "axios";
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {format} from "date-fns";
 toast.configure()
+
 
 class App extends React.Component{
   state = {
@@ -27,13 +28,10 @@ class App extends React.Component{
       // Set to 15sec
       position: toast.POSITION.BOTTOM_LEFT, autoClose:15000})
   }
-  todo_list_and_creation_url = "http://127.0.0.1:8000/todonew/"
+  //todo_list_and_creation_url = "http://127.0.0.1:8000/todonew/"
     convert_datetime(inputString){
         const date = new Date(inputString);
-        const formattedDate = format(date, "dd-MM-yyyy H:mm");
-        //console.log("Date is being converted")
-       // console.log("Before: "+inputString+", after: "+formattedDate)
-        return formattedDate
+        return format(date, "dd-MM-yyyy H:mm");
     }
 
   addTodo = (todo_payload)=>{
@@ -41,7 +39,7 @@ class App extends React.Component{
       todo_payload.due_datetime = this.convert_datetime(todo_payload.due_datetime)
 
     // const data_payload = { title: todo_payload.title,description:desc,due_datetime:"10-10-2020 10:10"}
-    axios.post(this.todo_list_and_creation_url, todo_payload, this.login_auth_credentials)
+    axiosInstance.post('/todonew/', todo_payload, this.login_auth_credentials)
         .then(results=>{
           const todo_item = results.data
           this.setState({todos:[...this.state.todos,todo_item]})
@@ -81,7 +79,7 @@ class App extends React.Component{
       )
       console.log("THis is the payload to be editted")
       console.log(todo_edited)
-    axios.put(this.todo_list_and_creation_url+todo_edited.id+"/", todo_edited, this.login_auth_credentials)
+    axiosInstance.put('/todonew/'+todo_edited.id+"/", todo_edited, this.login_auth_credentials)
         .then(results=>{
           const todo_item_from_response = results.data
           this.setState({
@@ -96,14 +94,15 @@ class App extends React.Component{
         .catch(error => {
           console.log(error.response)
           this.showErrorToast("Network error occurred updating the Todo")
-        });;
+        });
 
 
   }
   componentDidMount() {
     //fetching all existing list of todos
-    axios
-        .get(this.todo_list_and_creation_url,this.login_auth_credentials)
+      //axiosInstance.get('/todonew/')
+      axiosInstance
+        .get('/todonew/',this.login_auth_credentials)
         .then(results =>
         {
             this.setState({todos:results.data})
@@ -114,7 +113,7 @@ class App extends React.Component{
   }
 
   ItemDeleteCallBack = todoId =>{
-    axios.delete(this.todo_list_and_creation_url+todoId+"/",this.login_auth_credentials)
+      axiosInstance.delete('/todonew/'+todoId+"/",this.login_auth_credentials)
         .then(() => this.setState({todos:this.state.todos.filter(todo=>todo.id !==todoId)}))
         .catch(error => {
           this.showErrorToast("Network error occurred deleting Todo")
